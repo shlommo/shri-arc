@@ -12,6 +12,13 @@ class Dispatcher {
     this._lastId = 1;
   }
 
+  /**
+   * Регистрация callback-а который будет вызван при каждом переданном экшене.
+   * Возвращает токен.
+   *
+   * @param {function} callback
+   * @return {string}
+   */
   register(callback) {
     const id = _prefix + this._lastId++;
     this._callbacks[id] = callback;
@@ -19,10 +26,20 @@ class Dispatcher {
     return id;
   }
 
+  /**
+   * Удаляет callback по его токену.
+   *
+   * @param {string} id
+   */
   unregister(id) {
     delete this._callbacks[id];
   }
 
+  /**
+   * Отправдяет payload всем зарегестрированным callback-ам.
+   *
+   * @param {object} payload
+   */
   dispatch(payload) {
     logger.log('передача данных', JSON.stringify(payload));
     this._startDispatching(payload);
@@ -38,6 +55,12 @@ class Dispatcher {
     }
   }
 
+  /**
+   * Вызов callback-а по его токену.
+   *
+   * @param {string} id
+   * @internal
+   */
   _invokeCallback(id) {
     this._isPending[id] = true;
     this._callbacks[id](this._pendingPayload);
