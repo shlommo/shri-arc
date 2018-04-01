@@ -14,6 +14,9 @@ class Store {
     });
   }
 
+  /**
+   * @param {function} callback
+   */
   addListener(callback) {
     logger.log('подписал DOM ноду на изменение данных');
     return this._emitter.subscribe(this._changeEvent, callback);
@@ -24,9 +27,13 @@ class Store {
   }
 
   getInitialState() {
-    return true;
+
   }
 
+  /**
+   * @param {any} state
+   * @param {Object} action
+   */
   reduce(state, action) {
     logger.log(state, action);
   }
@@ -35,6 +42,11 @@ class Store {
     return one === two;
   }
 
+  /**
+   * Метод для изменения данных в хранилище.
+   *
+   * @param {Object} action
+   */
   _invokeOnDispatch(action) {
     this._changed = false;
 
@@ -52,7 +64,6 @@ class Store {
       this._emitChange();
       logger.log('данные в store переписались');
     }
-
 
     if (this._changed) {
       logger.log('передача слушателю события');
